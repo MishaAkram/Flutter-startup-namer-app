@@ -80,18 +80,49 @@ class _RandomWordsState extends State<RandomWords> {
     },               // ... to here.
     );
   }
+  
+  void _pushSaved() {
+     Navigator.of(context).push(
+        MaterialPageRoute<void>(
+        // NEW lines from here...
+        builder: (BuildContext context) {
+          final tiles = _saved.map(
+            (WordPair pair) {
+              return ListTile(
+                title: Text(
+                  pair.asPascalCase,
+                  style: _biggerFont,
+                ),
+              );
+            },
+          );
+          final divided = tiles.isNotEmpty
+              ? ListTile.divideTiles(context: context, tiles: tiles).toList()
+              : <Widget>[];
 
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Saved Suggestions'),
+            ),
+            body: ListView(children: divided),
+          );
+        }, // ...to here.
+        ),
+  );
+     
+  }
   @override
   Widget build(BuildContext context) {
-   //final wordPair = WordPair.random(); // Delete these... 
-    //return Text(wordPair.asPascalCase); // ... two lines.
-
-    return Scaffold (                     // Add from here... 
+    return Scaffold(
       appBar: AppBar(
         title: Text('Startup Name Generator'),
+        actions: [
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+        ],
       ),
       body: _buildSuggestions(),
-    );                                      // ... to here.
+    );
   }
+  
   
 }
